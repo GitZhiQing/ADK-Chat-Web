@@ -1,3 +1,3 @@
 onlyBuiltDependencies:
-  - core-js
-  - core-js-pure
+  - '@swc/core'
+  - esbuild
