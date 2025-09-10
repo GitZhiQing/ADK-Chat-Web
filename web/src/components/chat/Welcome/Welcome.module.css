@@ -1,0 +1,55 @@
+/* 无会话状态 */
+.welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 6rem;
+}
+
+.welcomeCard {
+  background: transparent;
+  border: none;
+  margin-top: 0;
+  padding-top: 0;
+  box-shadow: none !important;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.welcomeContent {
+  padding: 24px;
+}
+
+.welcomeTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.robotIcon {
+  font-size: 24px;
+  color: #1890ff;
+}
+
+.titleText {
+  margin: 0 !important;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.welcomeDesc {
+  display: block;
+  font-size: 14px;
+}
+
+.senderContainer {
+  width: 100%;
+  max-width: 600px;
+}

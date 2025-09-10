@@ -7,13 +7,13 @@ import {
   Typography,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useChat } from "../../contexts/ChatContext";
 import { useSessions } from "../../hooks/useSessions";
 import { useMessages } from "../../hooks/useMessages";
 import { useAppManager } from "../../hooks/useAppManager";
 import { SessionList } from "../session/SessionList";
-import { WelcomeComponent } from "../chat/Welcome";
+import { ChatArea } from "../chat/ChatArea";
 import { AppBar } from "./AppBar";
 import type { RunAgentRequest } from "../../types/request";
 import type { Event } from "../../types/event";
@@ -21,8 +21,8 @@ import styles from "../../styles/global.module.css";
 
 const { Sider, Content } = Layout;
 
-// 主页布局组件（无会话状态）
-export const AppLayout: React.FC = () => {
+// 会话页面布局组件
+export const SessionLayout: React.FC = () => {
   const {
     sessions,
     currentSession,
@@ -33,8 +33,9 @@ export const AppLayout: React.FC = () => {
   } = useChat();
 
   const { selectedApp, userId, loadApps } = useAppManager();
+  const { sessionId } = useParams();
   const navigate = useNavigate();
-  const { listSessions: fetchSessions, createSession } = useSessions();
+  const { listSessions: fetchSessions, getSession } = useSessions();
   const { runAgentWithFetch } = useMessages();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -53,6 +54,33 @@ export const AppLayout: React.FC = () => {
       dispatch({ type: "SET_SESSIONS", payload: [] });
     }
   }, [selectedApp, userId]);
+
+  // Load session based on route parameter
+  useEffect(() => {
+    if (sessionId && selectedApp && userId) {
+      selectSession(sessionId);
+    } else if (sessionId && (!selectedApp || !userId)) {
+      // 如果有sessionId但没有app或userId，尝试从本地存储获取
+      const savedAppName = localStorage.getItem("selectedAppName");
+      const savedUserId = localStorage.getItem("userId");
+      
+      if (savedAppName && savedUserId) {
+        // 等待状态更新后再加载会话
+        setTimeout(() => {
+          selectSession(sessionId);
+        }, 100);
+      } else {
+        // Clear current session and redirect to home when app or user is not selected
+        dispatch({ type: "SET_CURRENT_SESSION", payload: null });
+        navigate("/");
+      }
+    } else {
+      // Clear current session and redirect to home when app or user is not selected
+      // or when there's no sessionId
+      dispatch({ type: "SET_CURRENT_SESSION", payload: null });
+      navigate("/");
+    }
+  }, [sessionId, selectedApp, userId]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -80,47 +108,27 @@ export const AppLayout: React.FC = () => {
     }
   };
 
-  const createNewSession = async (message: string) => {
+  const selectSession = async (sessionId: string) => {
     if (!selectedApp || !userId) return;
 
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      const session = await createSession(selectedApp, userId);
+      const session = await getSession(selectedApp, userId, sessionId);
       dispatch({ type: "SET_CURRENT_SESSION", payload: session });
-      dispatch({ type: "SET_SESSIONS", payload: [session, ...sessions] });
-      dispatch({ type: "SET_MESSAGES", payload: [] });
-
-      // 导航到会话页面（在发送消息之前）
-      navigate(`/sessions/${session.id}`);
-
-      // 在会话页面发送消息
-      if (session && session.id && selectedApp) {
-        // 使用setTimeout确保导航完成后再发送消息
-        setTimeout(() => {
-          sendFirstMessage(message, session.id, selectedApp, userId);
-        }, 100);
-      }
-
-      return session;
+      dispatch({ type: "SET_MESSAGES", payload: session.events });
     } catch (err) {
       dispatch({
         type: "SET_ERROR",
-        payload: "Failed to create session: " + (err as Error).message,
+        payload: "Failed to load session: " + (err as Error).message,
       });
-      throw err;
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
-  // 处理会话创建后的首次消息发送
-  const sendFirstMessage = async (
-    inputMessage: string,
-    sessionId: string,
-    appName: string,
-    userId: string
-  ) => {
-    if (!inputMessage.trim() || !sessionId || !appName || !userId) return;
+  const sendMessage = async (inputMessage: string) => {
+    if (!inputMessage.trim() || !currentSession || !selectedApp || !userId)
+      return;
 
     try {
       dispatch({ type: "SET_LOADING", payload: true });
@@ -146,9 +154,9 @@ export const AppLayout: React.FC = () => {
 
       // Prepare request
       const request: RunAgentRequest = {
-        appName: appName,
+        appName: selectedApp,
         userId: userId,
-        sessionId: sessionId,
+        sessionId: currentSession.id,
         newMessage: {
           role: "user",
           parts: [{ text: inputMessage }],
@@ -304,7 +312,7 @@ export const AppLayout: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <AppBar showControls={true} onReload={loadSessions} />
+      <AppBar showControls={false} />
 
       <div className={styles.main}>
         {/* Sidebar for session management */}
@@ -355,15 +363,16 @@ export const AppLayout: React.FC = () => {
             />
           )}
 
-          <WelcomeComponent
-            isLoading={isLoading}
-            selectedApp={selectedApp || ""}
-            userId={userId}
-            onSendMessage={async (message) => {
-              // 创建新会话并发送消息
-              await createNewSession(message);
-            }}
-          />
+          {currentSession ? (
+            <ChatArea isLoading={isLoading} onSendMessage={sendMessage} />
+          ) : (
+            <div className={styles.noSession}>
+              <Typography.Title level={4}>会话不存在或已删除</Typography.Title>
+              <Button type="primary" onClick={() => navigate("/")}>
+                返回首页
+              </Button>
+            </div>
+          )}
         </Content>
       </div>
     </div>

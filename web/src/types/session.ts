@@ -1,4 +1,4 @@
-import { Event } from "./event";
+import type { Event } from "./event";
 
 export interface Session {
   id: string;

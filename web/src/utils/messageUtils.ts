@@ -16,10 +16,9 @@ export const getMessageText = (message: Event): string => {
 
 /**
  * 检查是否为最终响应
- * @param event 事件对象
  * @returns 是否为最终响应
  */
-export const isFinalResponse = (event: Event): boolean => {
+export const isFinalResponse = (): boolean => {
   // Implementation would go here if needed
   return true;
 };
