@@ -35,7 +35,7 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
   if (part.text) {
     return (
       <div className={styles.messageText}>
-        <Typography>
+        <Typography style={{ fontSize: '17px', lineHeight: '1.6' }}>
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: used in demo */}
           <div dangerouslySetInnerHTML={{ __html: md.render(part.text) }} />
         </Typography>
@@ -54,8 +54,8 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
           {
             key: 'functionCall',
             label: (
-              <span className={`${styles.collapseHeader} ${styles.functionCallHeader}`}>
-                工具调用: {part.functionCall.name}
+              <span className={`${styles.collapseHeader}`}>
+                [工具调用] {part.functionCall.name}
               </span>
             ),
             children: (
@@ -81,8 +81,8 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
           {
             key: 'functionResponse',
             label: (
-              <span className={`${styles.collapseHeader} ${styles.functionResponseHeader}`}>
-                工具响应: {part.functionResponse.name}
+              <span className={`${styles.collapseHeader}`}>
+                [工具响应] {part.functionResponse.name}
               </span>
             ),
             children: (
@@ -107,11 +107,7 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
         items={[
           {
             key: 'codeExecution',
-            label: (
-              <span className={`${styles.collapseHeader} ${styles.codeExecutionHeader}`}>
-                代码执行结果
-              </span>
-            ),
+            label: <span className={`${styles.collapseHeader}`}>代码执行结果</span>,
             children: (
               <Card size="small" className={styles.card}>
                 <p style={{ margin: '0 0 8px 0' }}>
@@ -145,10 +141,12 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
       items={[
         {
           key: 'unknown',
-          label: (
-            <span className={`${styles.collapseHeader} ${styles.unknownHeader}`}>未知内容类型</span>
+          label: <span className={`${styles.collapseHeader} `}>未知内容类型</span>,
+          children: (
+            <div className={styles.collapseContent}>
+              <pre className={styles.cardPre}>{JSON.stringify(part, null, 2)}</pre>
+            </div>
           ),
-          children: <pre className={styles.cardPre}>{JSON.stringify(part, null, 2)}</pre>,
           className: styles.collapsePanel,
         },
       ]}
@@ -203,13 +201,13 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ isLoading, onSendMessage }) 
       if (part.text) {
         content += part.text + '\n';
       } else if (part.functionCall) {
-        content += `工具调用:\n名称: ${
+        content += `[工具调用] ${
           part.functionCall.name
-        }\n参数: ${JSON.stringify(part.functionCall.args, null, 2)}\n`;
+        }\n${JSON.stringify(part.functionCall.args, null, 2)}\n`;
       } else if (part.functionResponse) {
-        content += `工具响应:\n名称: ${
+        content += `[工具响应] ${
           part.functionResponse.name
-        }\n响应: ${JSON.stringify(part.functionResponse.response, null, 2)}\n`;
+        }\n${JSON.stringify(part.functionResponse.response, null, 2)}\n`;
       } else if (part.codeExecutionResult) {
         content += `代码执行结果:\n状态: ${part.codeExecutionResult.status || '未知'}\n`;
         if (part.codeExecutionResult.result) {
@@ -265,7 +263,6 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ isLoading, onSendMessage }) 
           value={inputValue}
           onChange={(value: string) => setInputValue(value)}
           onSubmit={async (value: string) => {
-            // Simulate sending message
             await new Promise(resolve => setTimeout(resolve, 100));
             onSendMessage(value);
             // 清除输入框内容

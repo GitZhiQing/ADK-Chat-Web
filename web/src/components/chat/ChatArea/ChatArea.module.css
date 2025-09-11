@@ -2,16 +2,16 @@
 .messagesContainer {
   flex: 1;
   overflow-y: auto;
-  padding: 8rem;
+  padding: 2rem 8rem;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 }
 
 /* 消息项 */
 .messageItem {
   display: flex;
-  gap: 12px;
+  gap: 1rem;
   max-width: 100%;
 }
 
@@ -38,11 +38,11 @@
 }
 
 .userMessage .messageAvatar {
-  background-color: #1890ff;
+  background-color: var(--primary);
 }
 
 .agentMessage .messageAvatar {
-  background-color: #f5f5f5;
+  background-color: var(--bg-color);
   color: var(--text-color);
   border: 1px solid var(--border-color);
 }
@@ -51,7 +51,7 @@
 .messageContent {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
   flex: 1;
 }
@@ -67,11 +67,9 @@
 
 /* 消息文本 */
 .messageText {
-  border-radius: 18px;
-  padding: 10px 14px;
+  border-radius: 8px;
+  padding: 0 1.2rem;
   word-wrap: break-word;
-  line-height: 1.5;
-  font-size: 14px;
 }
 
 .userMessage .messageText {
@@ -92,6 +90,7 @@
   justify-content: left;
   align-items: center;
   width: 100%;
+  margin-top: -10px;
 }
 
 .userMessage .messageFooter {
@@ -100,7 +99,7 @@
 
 .messageTime {
   font-size: 0.8rem;
-  color: var(--secondary);
+  color: var(--text-secondary);
 }
 
 .copyBtn {
@@ -154,10 +153,10 @@
 
 .cardPre {
   padding: 12px;
+  margin: 0;
   border-radius: 6px;
   overflow-x: auto;
-  margin: 0;
-  font-size: 0.8rem;
+  font-size: 16px !important;
   line-height: 1.4;
   max-height: 150px;
   background-color: var(--bg-color-secondary);
@@ -167,11 +166,9 @@
 /* 折叠面板 */
 .collapse {
   max-width: 100%;
-  margin: 8px 0;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   background-color: var(--card-bg);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -185,7 +182,8 @@
 }
 
 .collapseHeader {
-  font-size: 0.85rem;
+  font-family: monospace;
+  font-size: 16px !important;
   font-weight: 500;
   color: var(--text-color);
   display: flex;
@@ -202,27 +200,6 @@
 
 .collapsePanel > div {
   padding: 0;
-}
-
-/* 工具调用特殊样式 */
-.functionCallHeader {
-  color: #1890ff;
-  font-weight: 500;
-}
-
-.functionResponseHeader {
-  color: #52c41a;
-  font-weight: 500;
-}
-
-.codeExecutionHeader {
-  color: #faad14;
-  font-weight: 500;
-}
-
-.unknownHeader {
-  color: #f5222d;
-  font-weight: 500;
 }
 
 /* 响应式设计 */
