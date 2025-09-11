@@ -1,4 +1,4 @@
-import type { Content } from "./llm";
+import type { Content } from './llm';
 
 export interface RunAgentRequest {
   appName: string;

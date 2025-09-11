@@ -1,4 +1,4 @@
-import type { LlmResponse } from "./llm";
+import type { LlmResponse } from './llm';
 
 export interface EventActions {
   stateDelta: Record<string, any>;

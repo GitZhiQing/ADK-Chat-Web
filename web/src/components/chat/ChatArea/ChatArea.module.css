@@ -122,7 +122,6 @@
 
 /* 发送消息区域 */
 .senderContainer {
-  padding: 16px;
   width: 80%;
   text-align: center;
   color: var(--text-secondary);

@@ -1,5 +1,5 @@
-import type { Event } from "../types/event";
-import type { FunctionCall, FunctionResponse } from "../types/llm";
+import type { Event } from '../types/event';
+import type { FunctionCall, FunctionResponse } from '../types/llm';
 
 /**
  * 获取消息的文本内容
@@ -7,11 +7,11 @@ import type { FunctionCall, FunctionResponse } from "../types/llm";
  * @returns 消息的纯文本内容
  */
 export const getMessageText = (message: Event): string => {
-  if (!message.content?.parts) return "";
+  if (!message.content?.parts) return '';
   return message.content.parts
-    .filter((part) => part.text)
-    .map((part) => part.text)
-    .join("\n");
+    .filter(part => part.text)
+    .map(part => part.text)
+    .join('\n');
 };
 
 /**

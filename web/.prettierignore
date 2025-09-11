@@ -1,0 +1,25 @@
+# Build artifacts
+dist
+build
+.out
+
+# Dependencies
+node_modules
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode
+.idea
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

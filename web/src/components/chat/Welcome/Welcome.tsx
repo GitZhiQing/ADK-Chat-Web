@@ -1,8 +1,8 @@
-import React from "react";
-import { Card, Typography } from "antd";
-import { Sender } from "@ant-design/x";
-import { RobotOutlined } from "@ant-design/icons";
-import styles from "./Welcome.module.css";
+import React from 'react';
+import { Card, Typography } from 'antd';
+import { Sender } from '@ant-design/x';
+import { RobotOutlined } from '@ant-design/icons';
+import styles from './Welcome.module.css';
 
 const { Title, Text } = Typography;
 

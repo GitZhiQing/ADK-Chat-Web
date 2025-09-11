@@ -1,11 +1,11 @@
-import React from "react";
-import { List, Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { useChat } from "../../../contexts/ChatContext";
-import { useSessions } from "../../../hooks/useSessions";
-import type { SessionSimple, Session } from "../../../types/session";
-import styles from "./SessionList.module.css";
+import React from 'react';
+import { List, Button, message } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { useChat } from '../../../contexts/ChatContext';
+import { useSessions } from '../../../hooks/useSessions';
+import type { SessionSimple, Session } from '../../../types/session';
+import styles from './SessionList.module.css';
 
 interface SessionListProps {
   sessions: SessionSimple[];
@@ -27,75 +27,44 @@ export const SessionList: React.FC<SessionListProps> = ({
     return [...sessions].sort((a, b) => b.lastUpdateTime - a.lastUpdateTime);
   }, [sessions]);
 
-  const handleDeleteSession = async (
-    sessionId: string,
-    e: React.MouseEvent
-  ) => {
-    e.stopPropagation();
-
-    if (currentSession?.id === sessionId) {
-      try {
-        dispatch({ type: "SET_LOADING", payload: true });
+  const handleDeleteSession = async (sessionId: string) => {
+    try {
+      if (currentSession?.id === sessionId) {
+        dispatch({ type: 'SET_LOADING', payload: true });
         await removeSession(selectedApp, userId, sessionId);
         dispatch({
-          type: "SET_SESSIONS",
-          payload: sortedSessions.filter((s) => s.id !== sessionId),
+          type: 'SET_SESSIONS',
+          payload: sortedSessions.filter(s => s.id !== sessionId),
         });
-        dispatch({ type: "SET_CURRENT_SESSION", payload: null });
+        dispatch({ type: 'SET_CURRENT_SESSION', payload: null });
+        // 显示删除成功提示
+        message.success('会话删除成功');
         // 跳转到首页
-        navigate("/");
-      } catch (err) {
-        dispatch({
-          type: "SET_ERROR",
-          payload: "Failed to delete session: " + (err as Error).message,
-        });
-      } finally {
-        dispatch({ type: "SET_LOADING", payload: false });
-      }
-    } else {
-      try {
+        navigate('/');
+      } else {
         await removeSession(selectedApp, userId, sessionId);
         dispatch({
-          type: "SET_SESSIONS",
-          payload: sortedSessions.filter((s) => s.id !== sessionId),
+          type: 'SET_SESSIONS',
+          payload: sortedSessions.filter(s => s.id !== sessionId),
         });
-      } catch (err) {
-        dispatch({
-          type: "SET_ERROR",
-          payload: "Failed to delete session: " + (err as Error).message,
-        });
+        // 显示删除成功提示
+        message.success('会话删除成功');
       }
+    } catch (err) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: 'Failed to delete session: ' + (err as Error).message,
+      });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
-  };
-
-  // Format session title to show first few characters of the first message
-  const formatSessionTitle = (session: SessionSimple) => {
-    // Try to extract first message content if available
-    if (session.events && session.events.length > 0) {
-      const firstEvent = session.events[0];
-      if (
-        firstEvent.content &&
-        firstEvent.content.parts &&
-        firstEvent.content.parts.length > 0
-      ) {
-        const firstPart = firstEvent.content.parts[0];
-        if (firstPart.text) {
-          const maxLength = 20;
-          return firstPart.text.length > maxLength
-            ? firstPart.text.substring(0, maxLength) + "..."
-            : firstPart.text;
-        }
-      }
-    }
-
-    // Fallback to session ID if no first message
-    return session.id.substring(0, 20) + "...";
   };
 
   return (
     <div className={styles.sessionList}>
       <List
         dataSource={sortedSessions}
+        bordered={false}
         renderItem={(session: SessionSimple) => (
           <List.Item
             key={session.id}
@@ -104,27 +73,37 @@ export const SessionList: React.FC<SessionListProps> = ({
               navigate(`/sessions/${session.id}`);
             }}
             className={`${styles.sessionItem} ${
-              currentSession?.id === session.id ? styles.sessionItemActive : ""
+              currentSession?.id === session.id ? styles.sessionItemActive : ''
             }`}
           >
             <div className={styles.sessionContent}>
               <div className={styles.sessionInfo}>
-                <div className={styles.sessionTitle}>
-                  {formatSessionTitle(session)}
-                </div>
                 <div className={styles.sessionTime}>
                   {new Date(
                     session.lastUpdateTime > 10000000000
                       ? session.lastUpdateTime
                       : session.lastUpdateTime * 1000
-                  ).toLocaleString()}
+                  )
+                    .toLocaleDateString('zh-CN', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: false,
+                    })
+                    .replace(/\//g, '-')}
                 </div>
               </div>
               <Button
                 danger
                 type="text"
                 icon={<DeleteOutlined />}
-                onClick={(e) => handleDeleteSession(session.id, e)}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleDeleteSession(session.id);
+                }}
                 className={styles.deleteBtn}
               />
             </div>

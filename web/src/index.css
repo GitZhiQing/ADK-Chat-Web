@@ -14,82 +14,88 @@ body,
   --primary-lighten-2: #64b5f6;
   --primary-darken-1: #1565c0;
   --primary-darken-2: #0d47a1;
-  
+
   /* 辅助颜色 */
   --secondary: #424242;
   --secondary-lighten-1: #616161;
   --secondary-lighten-2: #757575;
   --secondary-darken-1: #212121;
   --secondary-darken-2: #000000;
-  
+
   /* 强调色 */
   --accent: #82b1ff;
   --accent-lighten-1: #b6d7ff;
   --accent-lighten-2: #e9ffff;
   --accent-darken-1: #4d82cb;
   --accent-darken-2: #00559d;
-  
+
   /* 状态颜色 */
   --success: #4caf50;
   --success-lighten-1: #7bc47f;
   --success-lighten-2: #a7d9a9;
   --success-darken-1: #3d8b40;
   --success-darken-2: #2d6a2f;
-  
+
   --info: #2196f3;
   --info-lighten-1: #51adf6;
   --info-lighten-2: #81c3f9;
   --info-darken-1: #1a78c2;
   --info-darken-2: #135aa9;
-  
+
   --warning: #fb8c00;
   --warning-lighten-1: #fca333;
   --warning-lighten-2: #fdb666;
   --warning-darken-1: #c87000;
   --warning-darken-2: #955400;
-  
+
   --error: #ff5252;
   --error-lighten-1: #ff8686;
   --error-lighten-2: #ffbab6;
   --error-darken-1: #cc4242;
   --error-darken-2: #993131;
-  
+
   /* 中性色 */
   --white: #ffffff;
   --black: #000000;
-  
+
   /* 浅色主题的文本和背景 */
   --bg-color: #ffffff;
   --bg-color-secondary: #f5f5f5;
   --surface: #ffffff;
   --surface-variant: #f5f5f5;
-  
+
   --text-primary: rgba(0, 0, 0, 0.87);
-  --text-secondary: rgba(0, 0, 0, 0.60);
+  --text-secondary: rgba(0, 0, 0, 0.6);
   --text-disabled: rgba(0, 0, 0, 0.38);
   --text-on-primary: #ffffff;
   --text-on-secondary: #ffffff;
   --text-on-accent: #000000;
-  
+
   --border-color: #e0e0e0;
   --divider-color: rgba(0, 0, 0, 0.12);
   --shadow-color: rgba(0, 0, 0, 0.15);
-  
+
   /* 组件颜色 */
   --card-bg: #ffffff;
   --input-bg: #ffffff;
   --menu-bg: #ffffff;
   --header-bg: #1976d2;
-  
+
   /* 圆角和阴影 */
   --border-radius: 4px;
   --border-radius-large: 8px;
-  --box-shadow-1: 0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12);
-  --box-shadow-2: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
-  --box-shadow-3: 0 3px 3px -2px rgba(0,0,0,0.2), 0 3px 4px 0 rgba(0,0,0,0.14), 0 1px 8px 0 rgba(0,0,0,0.12);
+  --box-shadow-1:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  --box-shadow-2:
+    0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  --box-shadow-3:
+    0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+    0 1px 8px 0 rgba(0, 0, 0, 0.12);
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* 暗色主题变量 - 覆盖浅色变量 */
   /* 主要颜色 */
   --primary: #42a5f5;
@@ -97,63 +103,63 @@ body,
   --primary-lighten-2: #83c3f7;
   --primary-darken-1: #1976d2;
   --primary-darken-2: #0d47a1;
-  
+
   /* 辅助颜色 */
   --secondary: #b0bec5;
   --secondary-lighten-1: #cfd8dc;
   --secondary-lighten-2: #eceff1;
   --secondary-darken-1: #90a4ae;
   --secondary-darken-2: #78909c;
-  
+
   /* 强调色 */
   --accent: #82b1ff;
   --accent-lighten-1: #b6d7ff;
   --accent-lighten-2: #e9ffff;
   --accent-darken-1: #4d82cb;
   --accent-darken-2: #00559d;
-  
+
   /* 状态颜色 */
   --success: #66bb6a;
   --success-lighten-1: #81c784;
   --success-lighten-2: #a2d5a2;
   --success-darken-1: #4caf50;
   --success-darken-2: #388e3c;
-  
+
   --info: #42a5f5;
   --info-lighten-1: #64b5f6;
   --info-lighten-2: #83c3f7;
   --info-darken-1: #1976d2;
   --info-darken-2: #0d47a1;
-  
+
   --warning: #ffa726;
   --warning-lighten-1: #ffb74d;
   --warning-lighten-2: #ffcc70;
   --warning-darken-1: #fb8c00;
   --warning-darken-2: #f57c00;
-  
+
   --error: #ef5350;
   --error-lighten-1: #ff8686;
   --error-lighten-2: #ffbab6;
   --error-darken-1: #e53935;
   --error-darken-2: #d32f2f;
-  
+
   /* 暗色主题的文本和背景 */
   --bg-color: #121212;
   --bg-color-secondary: #1e1e1e;
   --surface: #1e1e1e;
   --surface-variant: #2d2d2d;
-  
+
   --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.70);
-  --text-disabled: rgba(255, 255, 255, 0.50);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.5);
   --text-on-primary: #ffffff;
   --text-on-secondary: #000000;
   --text-on-accent: #000000;
-  
+
   --border-color: #424242;
   --divider-color: rgba(255, 255, 255, 0.12);
   --shadow-color: rgba(0, 0, 0, 0.45);
-  
+
   /* 组件颜色 */
   --card-bg: #1e1e1e;
   --input-bg: #2d2d2d;

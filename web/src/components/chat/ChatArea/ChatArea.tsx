@@ -1,15 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Sender } from "@ant-design/x";
-import { Card, Button, Typography, Collapse } from "antd";
-import {
-  CopyOutlined,
-  CheckOutlined,
-  UserOutlined,
-  RobotOutlined,
-} from "@ant-design/icons";
-import markdownit from "markdown-it";
-import { useChat } from "../../../contexts/ChatContext";
-import styles from "./ChatArea.module.css";
+import React, { useRef, useState, useEffect } from 'react';
+import { Sender } from '@ant-design/x';
+import { Card, Button, Typography, Collapse } from 'antd';
+import { CopyOutlined, CheckOutlined, UserOutlined, RobotOutlined } from '@ant-design/icons';
+import markdownit from 'markdown-it';
+import { useChat } from '../../../contexts/ChatContext';
+import styles from './ChatArea.module.css';
 
 const md = markdownit({ html: true, breaks: true });
 const { Panel } = Collapse;
@@ -59,18 +54,14 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
       >
         <Panel
           header={
-            <span
-              className={`${styles.collapseHeader} ${styles.functionCallHeader}`}
-            >
+            <span className={`${styles.collapseHeader} ${styles.functionCallHeader}`}>
               工具调用: {part.functionCall.name}
             </span>
           }
           key="functionCall"
           className={styles.collapsePanel}
         >
-          <pre className={styles.cardPre}>
-            {JSON.stringify(part.functionCall.args, null, 2)}
-          </pre>
+          <pre className={styles.cardPre}>{JSON.stringify(part.functionCall.args, null, 2)}</pre>
         </Panel>
       </Collapse>
     );
@@ -86,9 +77,7 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
       >
         <Panel
           header={
-            <span
-              className={`${styles.collapseHeader} ${styles.functionResponseHeader}`}
-            >
+            <span className={`${styles.collapseHeader} ${styles.functionResponseHeader}`}>
               工具响应: {part.functionResponse.name}
             </span>
           }
@@ -113,9 +102,7 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
       >
         <Panel
           header={
-            <span
-              className={`${styles.collapseHeader} ${styles.codeExecutionHeader}`}
-            >
+            <span className={`${styles.collapseHeader} ${styles.codeExecutionHeader}`}>
               代码执行结果
             </span>
           }
@@ -123,20 +110,16 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
           className={styles.collapsePanel}
         >
           <Card size="small" className={styles.card}>
-            <p style={{ margin: "0 0 8px 0" }}>
-              <strong>状态:</strong> {part.codeExecutionResult.status || "未知"}
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>状态:</strong> {part.codeExecutionResult.status || '未知'}
             </p>
             {part.codeExecutionResult.result && (
-              <pre className={styles.cardPre}>
-                {part.codeExecutionResult.result}
-              </pre>
+              <pre className={styles.cardPre}>{part.codeExecutionResult.result}</pre>
             )}
             {part.codeExecutionResult.logs && (
               <details>
                 <summary>执行日志</summary>
-                <pre className={styles.cardPre}>
-                  {part.codeExecutionResult.logs}
-                </pre>
+                <pre className={styles.cardPre}>{part.codeExecutionResult.logs}</pre>
               </details>
             )}
           </Card>
@@ -155,9 +138,7 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
     >
       <Panel
         header={
-          <span className={`${styles.collapseHeader} ${styles.unknownHeader}`}>
-            未知内容类型
-          </span>
+          <span className={`${styles.collapseHeader} ${styles.unknownHeader}`}>未知内容类型</span>
         }
         key="unknown"
         className={styles.collapsePanel}
@@ -168,31 +149,28 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
   );
 };
 
-export const ChatArea: React.FC<ChatAreaProps> = ({
-  isLoading,
-  onSendMessage,
-}) => {
+export const ChatArea: React.FC<ChatAreaProps> = ({ isLoading, onSendMessage }) => {
   const { messages } = useChat();
   const [isCopied, setIsCopied] = useState<{ [key: string]: boolean }>({});
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const senderRef = useRef<any>(null);
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   // Copy message to clipboard
   const copyToClipboard = async (text: string, messageId: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      setIsCopied((prev) => ({ ...prev, [messageId]: true }));
+      setIsCopied(prev => ({ ...prev, [messageId]: true }));
       setTimeout(() => {
-        setIsCopied((prev) => ({ ...prev, [messageId]: false }));
+        setIsCopied(prev => ({ ...prev, [messageId]: false }));
       }, 2000);
     } catch (err) {
-      console.error("Failed to copy text: ", err);
+      console.error('Failed to copy text: ', err);
     }
   };
 
@@ -207,18 +185,16 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   }
 
   const renderMessageContent = (message: Message) => {
-    return message.content?.parts.map((part, index) => (
-      <MessageContent key={index} part={part} />
-    ));
+    return message.content?.parts.map((part, index) => <MessageContent key={index} part={part} />);
   };
 
   // Get text content for copying
   const getMessageContentForCopying = (message: Message) => {
-    let content = "";
+    let content = '';
 
-    message.content?.parts.forEach((part) => {
+    message.content?.parts.forEach(part => {
       if (part.text) {
-        content += part.text + "\n";
+        content += part.text + '\n';
       } else if (part.functionCall) {
         content += `工具调用:\n名称: ${
           part.functionCall.name
@@ -228,9 +204,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
           part.functionResponse.name
         }\n响应: ${JSON.stringify(part.functionResponse.response, null, 2)}\n`;
       } else if (part.codeExecutionResult) {
-        content += `代码执行结果:\n状态: ${
-          part.codeExecutionResult.status || "未知"
-        }\n`;
+        content += `代码执行结果:\n状态: ${part.codeExecutionResult.status || '未知'}\n`;
         if (part.codeExecutionResult.result) {
           content += `结果: ${part.codeExecutionResult.result}\n`;
         }
@@ -248,33 +222,24 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   return (
     <>
       <div className={styles.messagesContainer}>
-        {messages.map((message) => (
+        {messages.map(message => (
           <div
             key={message.id}
             className={`${styles.messageItem} ${
-              message.author === "user"
-                ? styles.userMessage
-                : styles.agentMessage
+              message.author === 'user' ? styles.userMessage : styles.agentMessage
             }`}
           >
             <div className={styles.messageAvatar}>
-              {message.author === "user" ? <UserOutlined /> : <RobotOutlined />}
+              {message.author === 'user' ? <UserOutlined /> : <RobotOutlined />}
             </div>
             <div className={styles.messageContent}>
               {renderMessageContent(message)}
               <div className={styles.messageFooter}>
                 <Button
                   type="text"
-                  icon={
-                    isCopied[message.id] ? <CheckOutlined /> : <CopyOutlined />
-                  }
-                  onClick={() =>
-                    copyToClipboard(
-                      getMessageContentForCopying(message),
-                      message.id
-                    )
-                  }
-                  title={isCopied[message.id] ? "已复制!" : "复制消息"}
+                  icon={isCopied[message.id] ? <CheckOutlined /> : <CopyOutlined />}
+                  onClick={() => copyToClipboard(getMessageContentForCopying(message), message.id)}
+                  title={isCopied[message.id] ? '已复制!' : '复制消息'}
                   className={styles.copyBtn}
                 />
                 <span className={styles.messageTime}>
@@ -294,10 +259,10 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
           onChange={(value: string) => setInputValue(value)}
           onSubmit={async (value: string) => {
             // Simulate sending message
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 100));
             onSendMessage(value);
             // 清除输入框内容
-            setInputValue("");
+            setInputValue('');
           }}
           placeholder="今天你想问什么... (Enter 发送/Shift+Enter 换行)"
           disabled={isLoading}

@@ -12,46 +12,33 @@
   width: 100%;
   padding: 12px 16px !important;
   transition: all 0.2s ease;
-  background-color: transparent;
-  box-sizing: border-box;
-  background-color: var(--surface-variant);
+
+  border-bottom: none !important;
 }
 
 .sessionItem:hover {
-  border-color: var(--border-color) !important;
+  background-color: var(--surface-variant);
 }
 
 .sessionItemActive {
-  border-color: var(--primary) !important;
+  color: var(--text-primary);
+  background-color: var(--surface-variant);
 }
 
 .sessionContent {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
 }
 
 .sessionInfo {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sessionTitle {
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-primary);
 }
 
 .sessionTime {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -59,28 +46,14 @@
 }
 
 .deleteBtn {
-  align-self: flex-start;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 4px;
-  transition: all 0.2s;
-  opacity: 0;
+  opacity: 1;
   margin-left: 8px;
   background-color: transparent;
   border: none;
   color: var(--text-secondary);
 }
 
-.sessionItem:hover .deleteBtn {
-  opacity: 1;
-}
-
 .deleteBtn:hover {
   background-color: var(--error);
   color: var(--text-on-primary);
-  opacity: 1;
 }

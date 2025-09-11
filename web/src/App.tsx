@@ -1,10 +1,10 @@
-import React from "react";
-import { ConfigProvider, App as AntdApp } from "antd";
-import { ChatProvider } from "./contexts/ChatContext";
-import { AppLayout } from "./components/layout/AppLayout";
-import { SessionLayout } from "./components/layout/SessionLayout";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import zhCN from "antd/locale/zh_CN";
+import React from 'react';
+import { ConfigProvider, App as AntdApp } from 'antd';
+import { ChatProvider } from './contexts/ChatContext';
+import { AppLayout } from './components/layout/AppLayout';
+import { SessionLayout } from './components/layout/SessionLayout';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import zhCN from 'antd/locale/zh_CN';
 
 const App: React.FC = () => {
   return (
@@ -14,10 +14,7 @@ const App: React.FC = () => {
           <ChatProvider>
             <Routes>
               <Route path="/" element={<AppLayout key="home" />} />
-              <Route
-                path="/sessions/:sessionId"
-                element={<SessionLayout key="session" />}
-              />
+              <Route path="/sessions/:sessionId" element={<SessionLayout key="session" />} />
             </Routes>
           </ChatProvider>
         </AntdApp>
