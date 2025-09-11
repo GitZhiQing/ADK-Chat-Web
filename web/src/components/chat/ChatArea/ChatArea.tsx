@@ -174,6 +174,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
 }) => {
   const { messages } = useChat();
   const [isCopied, setIsCopied] = useState<{ [key: string]: boolean }>({});
+  const [inputValue, setInputValue] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const senderRef = useRef<any>(null);
 
@@ -289,14 +290,14 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
       <div className={styles.senderContainer}>
         <Sender
           ref={senderRef}
+          value={inputValue}
+          onChange={(value: string) => setInputValue(value)}
           onSubmit={async (value: string) => {
             // Simulate sending message
             await new Promise((resolve) => setTimeout(resolve, 100));
             onSendMessage(value);
             // 清除输入框内容
-            if (senderRef.current) {
-              senderRef.current.reset();
-            }
+            setInputValue("");
           }}
           placeholder="今天你想问什么... (Enter 发送/Shift+Enter 换行)"
           disabled={isLoading}
