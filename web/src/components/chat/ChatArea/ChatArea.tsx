@@ -7,7 +7,6 @@ import { useChat } from '../../../contexts/ChatContext';
 import styles from './ChatArea.module.css';
 
 const md = markdownit({ html: true, breaks: true });
-const { Panel } = Collapse;
 
 interface ChatAreaProps {
   isLoading: boolean;
@@ -51,19 +50,23 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
         bordered={false}
         className={styles.collapse}
         defaultActiveKey={[]} // 默认折叠
-      >
-        <Panel
-          header={
-            <span className={`${styles.collapseHeader} ${styles.functionCallHeader}`}>
-              工具调用: {part.functionCall.name}
-            </span>
-          }
-          key="functionCall"
-          className={styles.collapsePanel}
-        >
-          <pre className={styles.cardPre}>{JSON.stringify(part.functionCall.args, null, 2)}</pre>
-        </Panel>
-      </Collapse>
+        items={[
+          {
+            key: 'functionCall',
+            label: (
+              <span className={`${styles.collapseHeader} ${styles.functionCallHeader}`}>
+                工具调用: {part.functionCall.name}
+              </span>
+            ),
+            children: (
+              <pre className={styles.cardPre}>
+                {JSON.stringify(part.functionCall.args, null, 2)}
+              </pre>
+            ),
+            className: styles.collapsePanel,
+          },
+        ]}
+      />
     );
   }
 
@@ -74,21 +77,23 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
         bordered={false}
         className={styles.collapse}
         defaultActiveKey={[]} // 默认折叠
-      >
-        <Panel
-          header={
-            <span className={`${styles.collapseHeader} ${styles.functionResponseHeader}`}>
-              工具响应: {part.functionResponse.name}
-            </span>
-          }
-          key="functionResponse"
-          className={styles.collapsePanel}
-        >
-          <pre className={styles.cardPre}>
-            {JSON.stringify(part.functionResponse.response, null, 2)}
-          </pre>
-        </Panel>
-      </Collapse>
+        items={[
+          {
+            key: 'functionResponse',
+            label: (
+              <span className={`${styles.collapseHeader} ${styles.functionResponseHeader}`}>
+                工具响应: {part.functionResponse.name}
+              </span>
+            ),
+            children: (
+              <pre className={styles.cardPre}>
+                {JSON.stringify(part.functionResponse.response, null, 2)}
+              </pre>
+            ),
+            className: styles.collapsePanel,
+          },
+        ]}
+      />
     );
   }
 
@@ -99,32 +104,34 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
         bordered={false}
         className={styles.collapse}
         defaultActiveKey={[]} // 默认折叠
-      >
-        <Panel
-          header={
-            <span className={`${styles.collapseHeader} ${styles.codeExecutionHeader}`}>
-              代码执行结果
-            </span>
-          }
-          key="codeExecution"
-          className={styles.collapsePanel}
-        >
-          <Card size="small" className={styles.card}>
-            <p style={{ margin: '0 0 8px 0' }}>
-              <strong>状态:</strong> {part.codeExecutionResult.status || '未知'}
-            </p>
-            {part.codeExecutionResult.result && (
-              <pre className={styles.cardPre}>{part.codeExecutionResult.result}</pre>
-            )}
-            {part.codeExecutionResult.logs && (
-              <details>
-                <summary>执行日志</summary>
-                <pre className={styles.cardPre}>{part.codeExecutionResult.logs}</pre>
-              </details>
-            )}
-          </Card>
-        </Panel>
-      </Collapse>
+        items={[
+          {
+            key: 'codeExecution',
+            label: (
+              <span className={`${styles.collapseHeader} ${styles.codeExecutionHeader}`}>
+                代码执行结果
+              </span>
+            ),
+            children: (
+              <Card size="small" className={styles.card}>
+                <p style={{ margin: '0 0 8px 0' }}>
+                  <strong>状态:</strong> {part.codeExecutionResult.status || '未知'}
+                </p>
+                {part.codeExecutionResult.result && (
+                  <pre className={styles.cardPre}>{part.codeExecutionResult.result}</pre>
+                )}
+                {part.codeExecutionResult.logs && (
+                  <details>
+                    <summary>执行日志</summary>
+                    <pre className={styles.cardPre}>{part.codeExecutionResult.logs}</pre>
+                  </details>
+                )}
+              </Card>
+            ),
+            className: styles.collapsePanel,
+          },
+        ]}
+      />
     );
   }
 
@@ -135,17 +142,17 @@ const MessageContent: React.FC<{ part: MessagePart }> = ({ part }) => {
       bordered={false}
       className={styles.collapse}
       defaultActiveKey={[]} // 默认折叠
-    >
-      <Panel
-        header={
-          <span className={`${styles.collapseHeader} ${styles.unknownHeader}`}>未知内容类型</span>
-        }
-        key="unknown"
-        className={styles.collapsePanel}
-      >
-        <pre className={styles.cardPre}>{JSON.stringify(part, null, 2)}</pre>
-      </Panel>
-    </Collapse>
+      items={[
+        {
+          key: 'unknown',
+          label: (
+            <span className={`${styles.collapseHeader} ${styles.unknownHeader}`}>未知内容类型</span>
+          ),
+          children: <pre className={styles.cardPre}>{JSON.stringify(part, null, 2)}</pre>,
+          className: styles.collapsePanel,
+        },
+      ]}
+    />
   );
 };
 
@@ -154,7 +161,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ isLoading, onSendMessage }) 
   const [isCopied, setIsCopied] = useState<{ [key: string]: boolean }>({});
   const [inputValue, setInputValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const senderRef = useRef<any>(null);
+  const senderRef = useRef(null);
 
   // Scroll to bottom when messages change
   useEffect(() => {
